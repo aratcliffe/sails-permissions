@@ -5,7 +5,8 @@
   "main": "dist/api/hooks/permissions/index.js",
   "scripts": {
     "test": "gulp && mocha --reporter spec --compilers js:babel/register",
-    "prepublish": "gulp"
+      "prepublish": "gulp",
+      "preinstall": "gulp"
   },
   "repository": {
     "type": "git",
