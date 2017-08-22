@@ -14,6 +14,68 @@ module.exports = function (sails) {
         policies: path.resolve(__dirname, '../../policies'),
         config: path.resolve(__dirname, '../../../config')
     });
+
+    function validatePolicyConfig () {
+        var policies = sails.config.policies;
+        return _.all([
+            _.isArray(policies['*']),
+            _.intersection(permissionPolicies, policies['*']).length === permissionPolicies.length
+        ]);
+    }
+
+    function installModelOwnership () {
+        var models = sails.models;
+        
+        if (sails.config.models.autoCreatedBy === false) return;
+
+        _.each(models, function (model) {
+            if (model.autoCreatedBy === false) return;
+
+            _.defaults(model.attributes, {
+                createdBy: {
+                    model: 'User',
+                    index: true
+                },
+                owner: {
+                    model: 'User',
+                    index: true
+                }
+            });
+        });
+    }
+
+    function initializeFixtures () {
+        var fixturesPath = path.resolve(__dirname, '../../../config/fixtures/'),
+            models, roles;
+        
+        return require(path.resolve(fixturesPath, 'model')).createModels()
+            .then(function (m) {
+                models = m;
+                sails.hooks.permissions._modelCache = _.indexBy(models, 'identity');
+
+                return require(path.resolve(fixturesPath, 'role')).create();
+            })
+            .then(function (r) {
+                roles = r;
+                var userModel = _.find(models, { name: 'User' });
+                return require(path.resolve(fixturesPath, 'user')).create(roles, userModel);
+            })
+            .then(function () {
+                return sails.models.user.findOne({ email: sails.config.permissions.adminEmail });
+            })
+            .then(function (user) {
+                sails.log('sails-permissions: created admin user:', user);
+                user.createdBy = user.id;
+                user.owner = user.id;
+                return user.save();
+            })
+            .then(function (admin) {
+                return require(path.resolve(fixturesPath, 'permission')).create(roles, models, admin, sails.config.permissions);
+            })
+            .catch(function (error) {
+                sails.log.error(error);
+            });
+    }        
     
     return {
         configure: function () {
@@ -37,9 +99,9 @@ module.exports = function (sails) {
                     return next(error);
                 }
 
-                this.installModelOwnership();
+                installModelOwnership();
                 sails.after(config.afterEvent, function () {
-                    if (!this.validatePolicyConfig()) {
+                    if (!validatePolicyConfig()) {
                         sails.log.warn('One or more required policies are missing.');
                         sails.log.warn('Please see README for installation instructions: https://github.com/tjwebb/sails-permissions');
                     }
@@ -50,7 +112,7 @@ module.exports = function (sails) {
                         .then(function (count) {
                             if (count === _.keys(sails.models).length) return next();
                             
-                            return this.initializeFixtures()
+                            return initializeFixtures()
                                 .then(function () {
                                     next();
                                 });
@@ -61,68 +123,6 @@ module.exports = function (sails) {
                         })
                 });
             });
-        },
-        
-        validatePolicyConfig: function () {
-            var policies = sails.config.policies;
-            return _.all([
-                _.isArray(policies['*']),
-                _.intersection(permissionPolicies, policies['*']).length === permissionPolicies.length
-            ]);
-        },
-
-        installModelOwnership: function () {
-            var models = sails.models;
-            
-            if (sails.config.models.autoCreatedBy === false) return;
-
-            _.each(models, function (model) {
-                if (model.autoCreatedBy === false) return;
-
-                _.defaults(model.attributes, {
-                    createdBy: {
-                        model: 'User',
-                        index: true
-                    },
-                    owner: {
-                        model: 'User',
-                        index: true
-                    }
-                });
-            });
-        },
-
-        initializeFixtures: function () {
-            var fixturesPath = path.resolve(__dirname, '../../../config/fixtures/');
-            
-            return require(path.resolve(fixturesPath, 'model')).createModels()
-                .then(function (models) {
-                    this.models = models;
-                    sails.hooks.permissions._modelCache = _.indexBy(models, 'identity');
-
-                    return require(path.resolve(fixturesPath, 'role')).create();
-                })
-                .then(function (roles) {
-                    this.roles = roles;
-                    var userModel = _.find(this.models, { name: 'User' });
-                    return require(path.resolve(fixturesPath, 'user')).create(this.roles, userModel);
-                })
-                .then(function () {
-                    return sails.models.user.findOne({ email: sails.config.permissions.adminEmail });
-                })
-                .then(function (user) {
-                    sails.log('sails-permissions: created admin user:', user);
-                    user.createdBy = user.id;
-                    user.owner = user.id;
-                    return user.save();
-                })
-                .then(function (admin) {
-                    return require(path.resolve(fixturesPath, 'permission')).create(this.roles, this.models, admin, sails.config.permissions);
-                })
-                .catch(function (error) {
-                    sails.log.error(error);
-                });
-        }        
-        
+        }               
     };
 };
