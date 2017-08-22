@@ -3,10 +3,9 @@
 var permissionPolicies = ['passport', 'sessionAuth', 'ModelPolicy', 'OwnerPolicy', 'PermissionPolicy', 'RolePolicy'];
 var path = require('path');
 var _ = require('lodash');
-var loader = require('sails-util-mvcsloader');
 
-module.exports = function () {
-    loader.configure();
+module.exports = function (sails) {
+    var loader = require('sails-util-mvcsloader')(sails);
 
     return {
         configure: function configure() {
