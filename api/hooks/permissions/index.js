@@ -1,6 +1,4 @@
 var permissionPolicies = [
-  'passport',
-  'sessionAuth',
   'ModelPolicy',
   'OwnerPolicy',
   'PermissionPolicy',
@@ -69,8 +67,7 @@ module.exports = function (sails) {
             var policies = sails.config.policies;
             return _.all([
                 _.isArray(policies['*']),
-                _.intersection(permissionPolicies, policies['*']).length === permissionPolicies.length,
-                policies.AuthController && _.contains(policies.AuthController['*'], 'passport')
+                _.intersection(permissionPolicies, policies['*']).length === permissionPolicies.length
             ]);
         },
 

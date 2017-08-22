@@ -21,14 +21,12 @@ var modelRestrictions = {
     'Role',
     'Permission',
     'User',
-    'Passport'
   ],
   public: [
     'Role',
     'Permission',
     'User',
     'Model',
-    'Passport'
   ]
 };
 

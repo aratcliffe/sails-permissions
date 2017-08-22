@@ -1,6 +1,6 @@
 'use strict';
 
-var permissionPolicies = ['passport', 'sessionAuth', 'ModelPolicy', 'OwnerPolicy', 'PermissionPolicy', 'RolePolicy'];
+var permissionPolicies = ['ModelPolicy', 'OwnerPolicy', 'PermissionPolicy', 'RolePolicy'];
 var path = require('path');
 var _ = require('lodash');
 
