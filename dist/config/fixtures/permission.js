@@ -11,8 +11,8 @@ var grants = {
 };
 
 var modelRestrictions = {
-  registered: ['Role', 'Permission', 'User', 'Passport'],
-  'public': ['Role', 'Permission', 'User', 'Model', 'Passport']
+  registered: ['Role', 'Permission', 'User'],
+  'public': ['Role', 'Permission', 'User', 'Model']
 };
 
 // TODO let users override this in the actual model definition

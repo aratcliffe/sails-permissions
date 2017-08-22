@@ -59,7 +59,7 @@ module.exports = function (sails) {
 
         validatePolicyConfig: function validatePolicyConfig() {
             var policies = sails.config.policies;
-            return _.all([_.isArray(policies['*']), _.intersection(permissionPolicies, policies['*']).length === permissionPolicies.length, policies.AuthController && _.contains(policies.AuthController['*'], 'passport')]);
+            return _.all([_.isArray(policies['*']), _.intersection(permissionPolicies, policies['*']).length === permissionPolicies.length]);
         },
 
         installModelOwnership: function installModelOwnership() {
