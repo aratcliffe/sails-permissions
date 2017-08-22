@@ -19,9 +19,6 @@
 module.exports.policies = {
 
   '*': [
-    'basicAuth',
-    'passport',
-    'sessionAuth',
     'ModelPolicy',
     'AuditPolicy',
     'OwnerPolicy',
@@ -29,10 +26,6 @@ module.exports.policies = {
     'RolePolicy',
     'CriteriaPolicy'
   ],
-
-  AuthController: {
-    '*': [ 'passport' ]
-  },
 
   /***************************************************************************
   *                                                                          *

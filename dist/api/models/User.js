@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
-var _super = require('sails-auth/api/models/User');
+var _super = require('sails-hook-jwt/api/models/User');
 
 _.merge(exports, _super);
 _.merge(exports, {

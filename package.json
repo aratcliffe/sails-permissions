@@ -5,7 +5,7 @@
   "main": "dist/api/hooks/permissions/index.js",
   "scripts": {
     "test": "gulp && mocha --reporter spec --compilers js:babel/register",
-      "prepublish": "gulp"
+    "prepublish": "gulp"
   },
   "repository": {
     "type": "git",
@@ -51,9 +51,9 @@
   "dependencies": {
     "fnv-plus": "^1.2.10",
     "lodash": "^3.10.0",
-    "marlinspike": "^1.0",
     "pluralize": "^1.0.1",
     "sails-generate-entities": "latest",
+    "sails-util-mvcsloader": "github:aratcliffe/sails-util-mvcsloader",
     "waterline-criteria": "^0.11.1"
   },
   "bundledDependencies": [
