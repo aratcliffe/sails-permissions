@@ -17,15 +17,20 @@ exports.create = function (roles, userModel) {
     .then(function (user) {
       if (user) return user;
 
-      sails.log.info('sails-permissions: admin user does not exist; creating...');
-      return sails.models.user.register({
-        username: sails.config.permissions.adminUsername,
-        password: sails.config.permissions.adminPassword,
-        email: sails.config.permissions.adminEmail,
-        roles: [ _.find(roles, { name: 'admin' }).id ],
-        createdBy: 1,
-        owner: 1,
-        model: userModel.id
+        sails.log.info('sails-permissions: admin user does not exist; creating...');
+
+        return sails.models.user.create({
+            username: sails.config.permissions.adminUsername,
+            password: sails.config.permissions.adminPassword,
+            email: sails.config.permissions.adminEmail,
+            roles: [ _.find(roles, { name: 'admin' }).id ],
+            createdBy: 1,
+            owner: 1,
+            model: userModel.id            
+        }, function (err, user) {
+            if (err) {
+                sails.log(err);
+            }
       });
   });
 };

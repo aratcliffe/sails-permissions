@@ -21,7 +21,7 @@ _.merge(exports, {
   afterCreate: [
     function setOwner (user, next) {
       sails.log.verbose('User.afterCreate.setOwner', user);
-      User
+      this
         .update({ id: user.id }, { owner: user.id })
         .then(function (user) {
           next();
@@ -33,7 +33,7 @@ _.merge(exports, {
     },
     function attachDefaultRole (user, next) {
       sails.log('User.afterCreate.attachDefaultRole', user);
-      User.findOne(user.id)
+      this.findOne(user.id)
         .populate('roles')
         .then(function (_user) {
           user = _user;
