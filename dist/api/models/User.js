@@ -22,7 +22,7 @@ _.merge(exports, {
    */
   afterCreate: [function setOwner(user, next) {
     sails.log.verbose('User.afterCreate.setOwner', user);
-    User.update({ id: user.id }, { owner: user.id }).then(function (user) {
+    this.update({ id: user.id }, { owner: user.id }).then(function (user) {
       next();
     })['catch'](function (e) {
       sails.log.error(e);
@@ -30,7 +30,7 @@ _.merge(exports, {
     });
   }, function attachDefaultRole(user, next) {
     sails.log('User.afterCreate.attachDefaultRole', user);
-    User.findOne(user.id).populate('roles').then(function (_user) {
+    this.findOne(user.id).populate('roles').then(function (_user) {
       user = _user;
       return Role.findOne({ name: 'registered' });
     }).then(function (role) {
