@@ -26,6 +26,7 @@ exports.create = function (roles, userModel) {
     sails.log.info('sails-permissions: admin user does not exist; creating...');
 
     return sails.models.user.create({
+      organisation_id: sails.config.permissions.adminOrganisation,
       username: sails.config.permissions.adminUsername,
       password: sails.config.permissions.adminPassword,
       email: sails.config.permissions.adminEmail,
