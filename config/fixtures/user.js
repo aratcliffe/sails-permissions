@@ -28,10 +28,6 @@ exports.create = function (roles, userModel) {
             createdBy: 1,
             owner: 1,
             model: userModel.id            
-        }, function (err, user) {
-            if (err) {
-                sails.log(err);
-            }
-      });
+        });
   });
 };
