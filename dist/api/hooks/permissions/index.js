@@ -55,7 +55,6 @@ module.exports = function (sails) {
         }).then(function () {
             return sails.models.user.findOne({ email: sails.config.permissions.adminEmail });
         }).then(function (user) {
-            sails.log('sails-permissions: created admin user:', user);
             user.createdBy = user.id;
             user.owner = user.id;
             return user.save();
