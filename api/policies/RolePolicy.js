@@ -29,12 +29,16 @@ module.exports = function(req, res, next) {
    * We don't want to take this same course of action for an update or delete action, we would prefer to fail the entire request.
    * There is no notion of 'create' for an owner permission, so it is not relevant here.
    */
+
+    
   if (!_.contains(['update', 'delete'], action) && req.options.modelDefinition.attributes.owner) {
     // Some parsing must happen on the query down the line,
     // as req.query has no impact on the results from PermissionService.findTargetObjects.
     // I had to look at the actionUtil parseCriteria method to see where to augment the criteria
-    req.params.all().where = req.params.all().where || {};
-    req.params.all().where.owner = req.user.id;
+    var where = req.params.all().where;
+
+    req.query.where = where ? ((typeof where) === 'string' ? JSON.parse(where) : where) : {};
+    req.query.where.owner = req.user.id;      
     req.query.owner = req.user.id;
     _.isObject(req.body) && (req.body.owner = req.user.id);
   }

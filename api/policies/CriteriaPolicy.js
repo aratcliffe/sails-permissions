@@ -39,7 +39,7 @@ module.exports = function(req, res, next) {
         _.pluck(permissions, 'criteria'),
         function(c) {
           if (c.length == 0) {
-            return [{where: {}}];
+            return [];
           }
           return c;
         }

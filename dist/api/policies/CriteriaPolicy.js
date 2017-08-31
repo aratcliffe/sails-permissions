@@ -42,7 +42,7 @@ module.exports = function (req, res, next) {
     // if a permission has no criteria then it is always true
     var criteria = _lodash2['default'].compact(_lodash2['default'].flatten(_lodash2['default'].map(_lodash2['default'].pluck(permissions, 'criteria'), function (c) {
       if (c.length == 0) {
-        return [{ where: {} }];
+        return [];
       }
       return c;
     })));

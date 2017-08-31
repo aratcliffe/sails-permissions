@@ -97,8 +97,7 @@ module.exports = function (sails) {
                 if (error) {
                     return next(error);
                 }
-
-                installModelOwnership();
+                
                 sails.after(config.afterEvent, function () {
                     if (!validatePolicyConfig()) {
                         sails.log.warn('One or more required policies are missing.');
@@ -107,6 +106,8 @@ module.exports = function (sails) {
                 });
 
                 sails.after('hook:orm-offshore:loaded', function () {
+                    installModelOwnership();
+                    
                     sails.models.model.count()
                         .then(function (count) {
                             if (count === _.keys(sails.models).length) return next();
