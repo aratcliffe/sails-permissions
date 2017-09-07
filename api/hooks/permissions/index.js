@@ -8,7 +8,7 @@ var path = require('path');
 var _ = require('lodash');
 
 module.exports = function (sails) {
-    var loader = require('sails-util-mvcsloader')(sails);
+    var loader = require('sails-util-mvcsloader')(sails, 'orm-offshore');
 
     loader.configure({
         policies: path.resolve(__dirname, '../../policies'),
@@ -105,7 +105,7 @@ module.exports = function (sails) {
                     }
                 });
 
-                sails.after('hook:orm:loaded', function () {
+                sails.after('hook:orm-offshore:loaded', function () {
                     installModelOwnership();
                     
                     sails.models.model.count()

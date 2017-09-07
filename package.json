@@ -53,7 +53,7 @@
     "lodash": "^3.10.0",
     "pluralize": "^1.0.1",
     "sails-generate-entities": "latest",
-    "sails-util-mvcsloader": "^0.4.0",
+    "sails-util-mvcsloader": "github:aratcliffe/sails-util-mvcsloader",
     "waterline-criteria": "^0.11.1"
   },
   "bundledDependencies": [
