@@ -98,7 +98,8 @@ module.exports = function (sails) {
                     installModelOwnership();
 
                     sails.models.model.count().then(function (count) {
-                        if (count === _.keys(sails.models).length) return next();
+                        // The model cache used by the ModelPolicy is only built if initializeFixtures is called so do this every time
+                        //if (count === _.keys(sails.models).length) return next();
 
                         return initializeFixtures().then(function () {
                             next();
