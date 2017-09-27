@@ -77,7 +77,7 @@ function grantUserPermissions(roles, models, admin, config) {
     }];
 
     var permittedModels = _.filter(models, function (model) {
-        return _.contains(['Report'], model.name);
+        return _.contains(['Analysis', 'Dataset', 'Dateset', 'Job', 'MapView', 'RRule', 'Report', 'Schedule', 'Subscription', 'TimeGroup', 'TimeSet', 'TimeSetGroup', 'TimeZone'], model.name);
     });
 
     var grantPermissions = _.flatten(_.map(permittedModels, function (modelEntity) {
